@@ -1,3 +1,11 @@
+!# issue 2055 AArch64 Some SVE memory operands not set correctly
+!# CS_ARCH_ARM64, CS_MODE_ARM, CS_OPT_DETAIL
+0x22,0xa4,0x41,0xe5 == st1w	{z2.d}, p1, [z1.d, #4] ; operands[0].type: REG = z2 ; operands[1].type: REG = p1 ; operands[2].type: MEM ; operands[2].mem.base: REG = z1 ; operands[2].mem.disp: 0x4
+
+!# issue 2055 AArch64 Some SVE memory operands not set correctly
+!# CS_ARCH_ARM64, CS_MODE_ARM, CS_OPT_DETAIL
+0x24,0xc4,0xa1,0xc5 == ld1d	{z4.d}, p1/z, [z1.d, #8] ; operands[0].type: REG = z4 ; operands[1].type: REG = p1 ; operands[2].type: MEM ; operands[2].mem.base: REG = z1 ; operands[2].mem.disp: 0x8
+
 !# issue 2007 RISCV64 instruction groups
 !# CS_ARCH_RISCV, CS_MODE_RISCV64, CS_OPT_DETAIL
 0x63,0x04,0x03,0x00 == beqz t1, 8 ; op_count: 2 ; operands[0].type: REG = t1 ; operands[1].type: IMM = 0x8 ; Groups: branch_relative jump

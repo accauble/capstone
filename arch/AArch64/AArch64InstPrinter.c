@@ -2596,6 +2596,14 @@ static void printSVERegOp(MCInst *MI, unsigned OpNum, SStream *O, char suffix)
 	Reg = MCOperand_getReg(MCInst_getOperand(MI, OpNum));
 
 	if (MI->csh->detail) {
+		if (MI->csh->doing_mem) {
+			if (MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].mem.base == ARM64_REG_INVALID) {
+				MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].mem.base = Reg;
+			}
+			else if (MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].mem.index == ARM64_REG_INVALID) {
+				MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].mem.index = Reg;
+			}
+		} else {
 #ifndef CAPSTONE_DIET
 			uint8_t access;
 
@@ -2603,9 +2611,10 @@ static void printSVERegOp(MCInst *MI, unsigned OpNum, SStream *O, char suffix)
 			MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].access = access;
 			MI->ac_idx++;
 #endif
-		MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].type = ARM64_OP_REG;
-		MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].reg = Reg;
-		MI->flat_insn->detail->arm64.op_count++;
+		  MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].type = ARM64_OP_REG;
+		  MI->flat_insn->detail->arm64.operands[MI->flat_insn->detail->arm64.op_count].reg = Reg;
+		  MI->flat_insn->detail->arm64.op_count++;
+    }
 	}
 
 	SStream_concat0(O, getRegisterName(Reg, AArch64_NoRegAltName));
